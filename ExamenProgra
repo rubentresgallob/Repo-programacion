@@ -1,0 +1,58 @@
+import java.util.Random;
+import java.util.Scanner;
+
+public class FiestaCotillas {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int cantidadPersonas;
+        do {
+            System.out.print("Introduce el número de personas en la fiesta (mínimo 4): ");
+            cantidadPersonas = scanner.nextInt();
+            scanner.nextLine();
+            if (cantidadPersonas < 4) {
+                System.out.println("Debe haber al menos 4 personas en la fiesta");
+            }
+        } while (cantidadPersonas < 4);
+
+        String[] nombresInvitados = new String[cantidadPersonas];
+        for (int i = 0; i < cantidadPersonas; i++) {
+            System.out.print("Introduce el nombre de la persona " + (i + 1) + ": ");
+            nombresInvitados[i] = scanner.nextLine();
+        }
+
+        Random random = new Random();
+        int personaQueIniciaElRumor = random.nextInt(cantidadPersonas);
+        System.out.println("El rumor empieza con " + nombresInvitados[personaQueIniciaElRumor]);
+
+        int personaDelRumor;
+        do {
+            personaDelRumor = random.nextInt(cantidadPersonas);
+        } while (personaDelRumor == personaQueIniciaElRumor);
+        System.out.println("El rumor es sobre " + nombresInvitados[personaDelRumor]);
+
+        boolean[] personasQueHanEscuchado = new boolean[cantidadPersonas];
+        int personaActual = personaQueIniciaElRumor;
+        personasQueHanEscuchado[personaActual] = true;
+
+        boolean rumorEnProgreso = true;
+        while (rumorEnProgreso) {
+            int nuevaPersona;
+            do {
+                nuevaPersona = random.nextInt(cantidadPersonas);
+            } while (nuevaPersona == personaActual || personasQueHanEscuchado[nuevaPersona]);
+
+            System.out.println(nombresInvitados[personaActual] + " le cuenta el rumor a " + nombresInvitados[nuevaPersona]);
+
+            personasQueHanEscuchado[nuevaPersona] = true;
+
+            if (nuevaPersona == personaDelRumor) {
+                System.out.println("El rumor llega a " + nombresInvitados[nuevaPersona] + " por segunda vez. Fin del rumor.");
+                rumorEnProgreso = false;
+            } else {
+                personaActual = nuevaPersona;
+            }
+        }
+        scanner.close();
+    }
+}
